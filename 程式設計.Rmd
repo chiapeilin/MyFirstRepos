@@ -1,0 +1,575 @@
+---
+title: "Programming Language"
+author: "chiapeilin"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Introduction to the R language
+
+> 1.1 Calculate
+
+basic operations with R
+
+```{r collapse=TRUE}
+5+49
+
+2-5
+
+3*15
+
+1/0
+
+0/0  
+
+Inf-Inf 
+
+0*Inf 
+
+#餘數
+31%%7 
+
+#商數
+31%/%7
+
+```
+
+```{r collapse=TRUE}
+x=10:31
+mean(x)
+
+var(x)
+42.16667
+
+sum((x-mean(x))^2)/21
+
+```
+
+> 1.2 Vectors
+
+A numeric vector is a list of numbers. The c() function is used to collect things together into a vector.
+
+```{r collapse=TRUE}
+x=c(0,10,20)
+x
+
+```
+
+Extracting elements from vectors
+
+```{r collapse=TRUE}
+x[-3]
+
+```
+Operator for producing simple sequences of integers.
+Patterned vectors can also be produced using the seq() function as well as the rep()function.
+
+```{r collapse=TRUE}
+rep(10,5)
+
+rep(seq(11,30,by=3),3)
+
+rep(c(2,3,4),each=3)
+
+```
+
+
+> 1.3 Factors
+
+Factors offer an alternative way of storing character data. For example,
+a factor with four elements and having the two levels, control and
+treatment can be created using:
+
+```{r collapse=TRUE}
+grp <- c("control", "treatment", "control", "treatment")
+grp
+
+grp <- factor(grp)
+grp
+
+```
+
+> 1.4 Matrices and arrays
+
+To arrange values into a matrix, we use the matrix() function:
+
+```{r comment=NA}
+m <- matrix(1:6, nrow=2, ncol=3)
+m
+```
+
+We can then access elements using two indices.
+
+```{r collapse=TRUE}
+m[1, 2]
+
+
+#slect by row
+m[1,]
+
+
+#slect by column
+m[, 1]
+
+```
+> 1.5 Data frames
+
+These are like matrices, but
+with the columns having their own names. Columns can be of different
+types from each other. Use the data.frame()function to construct data frames from vectors:
+
+```{r comment=NA}  
+
+colors <- c("red", "yellow", "blue")  
+numbers <- c(1, 2, 3)  
+colors.and.numbers <- data.frame(colors, numbers,more.numbers=c(4, 5, 6))  
+colors.and.numbers  
+
+```
+
+> 1.6 Lists
+
+Data frames are actually a special kind of list, or structure. Lists in R can contain any other objects. You won’t often construct these yourself, but many functions return complicated results as lists.
+
+The list()function is one way of organizing multiple pieces of output
+from functions. For example,
+
+```{r comment=NA}  
+x <- c(3, 2, 3)  
+y <- c(7, 7)  
+list(x = x, y = y)  
+
+```
+
+## 2.Programming statistical graphics
+
+> 2.1 Bar charts and dot charts
+
+The most basic type of graph is one that displays a single set of numbers.Bar charts and dot charts do this by displaying a bar or dot whose length or position corresponds to the number.
+
+For example, the VADeaths dataset in R contains death rates (number
+of deaths per 1000 population per year) in various subpopulations within
+the state of Virginia in 1940.
+
+```{r}
+barplot(VADeaths,beside=TRUE,legend=TRUE,ylim=c(0,90),
+	ylab="Deaths per 1000",main="Death rates in Virginia")
+
+```
+
+```{r}
+dotchart(VADeaths,xlim=c(0,75),xlab="Deaths per 1000",main="Death rates in Virginia")
+
+```
+
+> 2.2 Pie charts
+
+Pie charts display a vector of numbers by breaking up a circular disk into pieces whose angle (and hence area) is proportional to each number.
+
+```{r}
+groupsizes=c(18,30,32,10,10)
+labels=c("甲","乙","丙","丁","戊")
+pie(groupsizes,labels,col=c("grey40","white","grey","black","grey90"))
+
+```
+
+> 2.3 Histograms
+
+A histogram is a special type of bar chart that is used to show the frequency distribution of a collection of numbers. Each bar represents the count of x values that fall in the range indicated by the base of the bar. 
+
+```{r}
+x=rnorm(100)
+hist(x)
+
+```
+
+> 2.4 Boxplot 
+
+A box plot (or “box-and-whisker plot”) is an alternative to a histogram to give a quick visual display of the main features of a set of data.Arectangular box is drawn, together with lines which protrude from two opposing sides.
+
+```{r}
+boxplot(Sepal.Length~Species,data=iris,ylab="Sepal length (cm)",main="Iris measurements)",boxwex=0.5)
+
+```
+
+> 2.5 Scatterplots
+
+When doing statistics, most of the interesting problems have to do with
+the relationships between different measurements. To study this, one of
+the most commonly used plots is the scatterplot.
+
+```{r}
+x=rnorm(100)
+y=rpois(100,30) 
+plot(x,y,main="Poisson versus Normal")
+
+```
+
+> 2.6 QQ plots
+
+Quantile–quantile plots (otherwise known as QQ plots) are a type of scatterplot **used to compare the distributions of two groups or to compare a sample with a reference distribution**.
+
+```{r}
+x<-rnorm(1000)
+A<-rnorm(1000)
+
+D<-exp(rnorm(1000))
+qqplot(x,D,main="D is skewed to the right")
+
+```
+
+> 2.7 Adding to plots
+
+Several functions exist to add components to the plot region of existing graphs.
+
+```{r}
+par(mar=c(5, 5, 5, 5) + 0.1)
+plot(c(1, 9), c(0, 50), type="n", xlab="", ylab="")
+text(6, 40, "Plot region")
+points(6, 20)
+text(6, 20, "(6, 20)", adj=c(0.5, 2))
+mtext(paste("Margin", 1:4), side=1:4, line=3)
+mtext(paste("Line", 0:4), side=1, line=0:4, at=3, cex=0.6)
+mtext(paste("Line", 0:4), side=2, line=0:4, at=15, cex=0.6)
+mtext(paste("Line", 0:4), side=3, line=0:4, at=3, cex=0.6)
+mtext(paste("Line", 0:4), side=4, line=0:4, at=15, cex=0.6)
+
+```
+
+The data are stored in a data frame called indexfinger which is displayed
+below.We can create **a simple scatter plot** of these data **illustrating the relation between length and width**.
+```{r}
+indexfinger=read.table("D:/temp/indexfinger.txt",header=T)
+plot(width~length,data=indexfinger)
+abline(lm(width ~length, data=indexfinger, subset=sex=="M"), lty=1)  
+abline(lm(width ~length, data=indexfinger, subset=sex=="F"), lty=2)  
+legend("topleft", legend=c("Male", "Female"), lty=1:2)
+
+```
+
+## 3.Simulation
+
+> 3.1 Generation of pseudorandom numbers
+
+We begin our discussion of simulation with a brief exploration of the
+mechanics of pseudorandom number generation. In particular, we will
+describe one of the simplest methods for simulating independent uniform
+random variables on the interval [0,1].
+
+```{r comment=NA}    
+# this will store the pseudorandom output
+random.number <- numeric(50)  
+random.seed <- 27218
+ for (j in 1:50) {
+ random.seed <- (171 * random.seed) %% 30269
+ random.number[j] <- random.seed / 30269
+ }
+random.number
+
+```
+
+Generate five uniform pseudorandom numbers on the interval [0, 1], and
+10 uniform such numbers on the interval [-3,-1].
+
+```{r comment=NA}
+runif(5)
+runif(10, min = -3, max = -1)
+
+```
+
+
+> 3.2  Random Variables of Common Distubution
+
+#### Binomial
+
+```{r collapse=TRUE}
+dbinom(x = 4, size = 6, prob = 0.5)
+pbinom(4,6,0.5)
+qbinom(0.89,6,0.5)
+rbinom(24,15,0.1)
+
+```
+
+#### Poisson
+```{r comment=NA}
+#poisson
+dpois(x=3,lambda=0.5)
+
+#poisson process*****
+set.seed(1)
+N <- rpois(1,1.5*10)
+P <- runif(N,max = 10) #生成N個數
+sort(P)
+
+```
+
+#### Exponential
+
+```{r comment=NA}
+pexp(1, rate = 3)
+
+X <- rexp(25, rate = 1.5)
+cumsum(X)
+
+```
+
+#### Normal
+
+```{r comment=NA}
+qnorm(0.95, mean = 2.7, sd = 3.3)
+rnorm(10, -3, 0.5)
+
+```
+
+> 3.3 Advanced simulation methods
+
+#### Rejection sampling
+
+Sample from a convenient distribution, and select a subsample to achieve the target distribution.
+
+```{r}
+set.seed(1)
+U1=runif(100000,max=2)
+U2=runif(100000)
+X=U1[U2<(1-abs(1-U1))]
+
+hist(X,breaks=50)
+
+```
+
+#### Importance sampling
+
+Importance sampling is a technique to generate both the sample and
+the weights randomly, in such a way that weighted averages approximate
+expected values with respect to a target density function g(x).
+
+```{r collapse=TRUE}
+k=0.45403
+g=function(x) 0.5*exp(-(x^1.5))/k
+
+X=rexp(100000)
+W=g(X)/dexp(X)
+
+mean0=weighted.mean(X,W)
+mean0
+weighted.mean((X-mean0)^2,W)
+```
+
+## 4. Computational linear algebra
+
+> 4.1 Vectors and matrices in R
+
+**Numeric matrices** in R are printed as rectangular arrays of numbers, but are **stored internally as vectors** with dimension attributes.
+
+We could also construct the matrix by binding columns together as
+follows:
+
+```{r comment=NA}
+1/cbind(seq(1, 3), seq(2, 4), seq(3, 5))
+```
+
+```{r comment=NA}
+matrix(c(1, 2, 3, 1, 4, 9), ncol=2)
+
+```
+
+> 4.2 Matrix properties
+
+The **diagonal elements** can be obtained using the**diag()** function, as
+in:
+
+```{r comment=NA}  
+y=cbind(seq(1, 3), seq(2, 4), seq(3, 5))  
+y  
+
+diag(y)   
+```
+The diag() function can also be used to turn a vector into a square
+diagonal matrix whose **diagonal elements correspond to the entries of the given vector**.
+
+```{r comment=NA}
+diag(diag(y)) 
+```
+
+We can obtain the lower triangular matrix whose nonzero elements
+match the lower triangular elements of H3 by using
+```{r comment=NA}
+Hnew=H3=y  
+Hnew[upper.tri(H3,diag=TRUE)]=0
+Hnew
+```
+
+The command **X * Y** performs **elementwise multiplication**.
+```{r comment=NA}  
+x=matrix(1:6,nrow = 3)
+y=matrix(c(3,4,5,7,7,7),ncol = 2)
+
+x*y
+```
+
+In R, the form of **matrix multiplication** can be performed using the
+operator **%*%**.
+```{r comment=NA}
+t(x)%*%y
+```
+
+> 4.2 Matrix inversion
+
+Matrices are inverted and linear systems of equations are solved using
+the solve().
+
+```{r comment=NA}
+H3=matrix(c(1,1/2,1/3,1/2,1/3,1/4,1/3,1/4,1/5),nrow = 3)
+H3inv <- solve(H3)  
+H3inv
+```
+
+The function solve(A, b)gives the solution to systems of equations of
+the form $$ Ax = b $$. For example, let us find x such that H3x = b where H3 is the 3 × 3 Hilbert matrix and b = [1 2 3]T.
+
+```{r comment=NA}
+b=c(1,2,3)
+H3=matrix(c(1,1/2,1/3,1/2,1/3,1/4,1/3,1/4,1/5),nrow = 3)
+x=solve(H3,b)
+x
+```
+
+> 4.3 Eigenvalues and eigenvectors
+
+Eigenvalues and eigenvectors can be computed using the function
+eigen(). 
+
+```{r comment=NA}
+eigen(H3)
+```
+
+Extracting eigenvalues and eigenvectors.
+
+```{r comment=NA}
+eigen(H3)$values
+eigen(H3)$vectors
+```
+
+## 5. Numerical optimization
+
+> 5.1 The golden section search method
+
+The golden section search method is a simple way of finding the minimizer
+of a single-variable function which has a single minimum on the interval
+[a, b].
+
+```  
+<Method>
+The golden section search method is an iterative method, which may be
+outlined as follows:
+1. Start with the interval [a, b], known to contain the minimizer.
+2. Repeatedly shrink it, finding smaller and smaller intervals [a, b] which still contain the minimizer.
+3. Stop when b ??? a is small enough, i.e. when the interval length is less
+than a pre-set tolerance.
+```  
+To check that this function has a single minimum in the interval we use
+the curve() function to plot it:
+```{r}
+f <- function(x) {
+  abs(x - 3.5) + (x - 2)^2
+}
+curve(f,from=1,to=5)
+```
+
+```{r comment=NA}
+golden <- function (f, a, b, tol = 0.0000001)
+  {ratio <- 2 / (sqrt(5) + 1)
+   x1 <- b - ratio * (b - a)
+   x2 <- a + ratio * (b - a)
+   f1 <- f(x1)
+   f2 <- f(x2)
+   while(abs(b - a) > tol) {
+      if (f2 > f1) {
+          b <- x2
+          x2 <- x1
+          f2 <- f1
+          x1 <- b - ratio * (b - a)
+          f1 <- f(x1)
+          } 
+      else {a <- x1
+            x1 <- x2
+            f1 <- f2
+            x2 <- a + ratio * (b - a)
+            f2 <- f(x2)
+           }
+     }
+   return((a + b) / 2)
+}
+golden(f, 1, 5)
+```
+
+
+> 5.2 Newton–Raphson
+
+If the function to be minimized has two continuous derivatives and we
+know how to evaluate them, we can make use of this information to give a
+faster algorithm than the golden section search.
+
+```  
+<Method>
+We want to find a minimizer x* of the function f(x) in the interval
+[a, b].
+1. Provided the minimizer is not at a or b, x??? will satisfy f'(x???) = 0 and f''(x???) > 0.
+2. using the Newton–Raphson algorithm to approximate a solution to f'(x???) = 0. Start with an initial guess x0, and compute an improved guess using the solution  x1 = x0-f'(x0)/f''(x0). 
+3. Continue with iterations of the form xn+1 = xn ??? f'(xn)/f''(xn).
+This iteration stops when f'(xn) is close enough to 0. Usually, we set a
+tolerance ε and stop when |f'(xn)| < ε.
+
+```
+We start by plotting the function to find an initial guess.
+
+```{r}
+f <- function(x) exp(-x) + x^4  
+curve(f, from=-1, to=4)
+```
+
+```{r comment=NA}
+f <- function(x) exp(-x) + x^4
+fprime <- function(x) -exp(-x) + 4 * x^3
+fprimeprime <- function(x) exp(-x) + 12 * x^2
+x <- c(0.5, rep(NA, 6))
+fval <- rep(NA, 7)
+fprimeval <- rep(NA, 7)
+fprimeprimeval <- rep(NA, 7)
+for (i in 1:6) {
+fval[i] <- f(x[i])
+fprimeval[i] <- fprime(x[i])
+fprimeprimeval[i] <- fprimeprime(x[i])
+x[i + 1] <- x[i] - fprimeval[i] / fprimeprimeval[i]
+}
+data.frame(x, fval, fprimeval, fprimeprimeval)
+```
+
+> 5.3 Linear programming
+
+We often need to minimize (or maximize) a function subject to constraints.When the function is linear and the constraints can be expressed as linear equations or inequalities, the problem is called a linear programming problem.
+
+```
+<Method>
+The idea is to find values of the decision variables x1, x2, . . . , xn
+which minimize the objective function C(x), subject to the constraints and nonnegativity conditions.
+min C(x) = c1x1 +· · ·+ckxk
+
+```
+```{r comment=NA}
+library(lpSolve)
+eg.lp <- lp(objective.in=c(5, 8), const.mat=matrix(c(1, 1, 1, 2),
+nrow=2), const.rhs=c(2, 3), const.dir=c(">=", ">="))
+#the minimum value of the objective function
+eg.lp
+
+#the output tells us that the minimizer
+eg.lp$solution
+```
+
+
+
+
